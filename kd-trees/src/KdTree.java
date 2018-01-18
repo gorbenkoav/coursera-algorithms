@@ -2,7 +2,7 @@ import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.RectHV;
 import edu.princeton.cs.algs4.StdDraw;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.TreeSet;
 
 /**
@@ -11,6 +11,7 @@ import java.util.TreeSet;
 public class KdTree {
 
     private Node root;
+    private int size;
 
     /**
      * Construct an empty set of points
@@ -25,7 +26,7 @@ public class KdTree {
      * @param p point to be validated
      * @throws IllegalArgumentException if point is null
      */
-    private void validate(Point2D p) throws IllegalArgumentException {
+    private void validate(Point2D p) {
         if (p == null) {
             throw new IllegalArgumentException("Point must not be null");
         }
@@ -46,11 +47,7 @@ public class KdTree {
      * @return number of points in the set
      */
     public int size() {
-        return size(root);
-    }
-
-    private int size(Node node) {
-        return node == null ? 0 : 1 + size(node.left) + size(node.right);
+        return size;
     }
 
     /**
@@ -60,12 +57,14 @@ public class KdTree {
      */
     public void insert(Point2D p) {
         validate(p);
-        root = insert(root, p, true, new RectHV(0, 0, 1, 1));
+        root = insert(root, p, true, 0, 0, 1, 1);
     }
 
-    private Node insert(Node node, Point2D p, boolean isVerticalDivision, RectHV rect) {
+    private Node insert(Node node, Point2D p, boolean isVerticalDivision,
+                        double xmin, double ymin, double xmax, double ymax) {
         if (node == null) {
-            return new Node(null, p, null, rect);
+            size++;
+            return new Node(null, p, null, new RectHV(xmin, ymin, xmax, ymax));
         }
 
         if (p.equals(node.point)) {
@@ -74,19 +73,15 @@ public class KdTree {
 
         if (isVerticalDivision) {
             if (p.x() < node.point.x()) {
-                node.left = insert(node.left, p, false,
-                        new RectHV(rect.xmin(), rect.ymin(), node.point.x(), rect.ymax()));
+                node.left = insert(node.left, p, false, xmin, ymin, node.point.x(), ymax);
             } else {
-                node.right = insert(node.right, p, false,
-                        new RectHV(node.point.x(), rect.ymin(), rect.xmax(), rect.ymax()));
+                node.right = insert(node.right, p, false, node.point.x(), ymin, xmax, ymax);
             }
         } else {
             if (p.y() < node.point.y()) {
-                node.left = insert(node.left, p, true,
-                        new RectHV(rect.xmin(), rect.ymin(), rect.xmax(), node.point.y()));
+                node.left = insert(node.left, p, true, xmin, ymin, xmax, node.point.y());
             } else {
-                node.right = insert(node.right, p, true,
-                        new RectHV(rect.xmin(), node.point.y(), rect.xmax(), rect.ymax()));
+                node.right = insert(node.right, p, true, xmin, node.point.y(), xmax, ymax);
             }
         }
 
@@ -196,7 +191,7 @@ public class KdTree {
         if (isEmpty()) {
             return null;
         }
-        return nearest(root, p, new Point2D(root.point.x(), root.point.y()));
+        return nearest(root, p, root.point);
     }
 
     private Point2D nearest(Node node, Point2D target, Point2D closest) {
@@ -204,13 +199,12 @@ public class KdTree {
             return closest;
         }
 
+        Point2D currentClosest = closest;
         double closestDistance = closest.distanceSquaredTo(target);
-        double nodeDistance = node.point.distanceSquaredTo(target);
+        if (Double.compare(node.rect.distanceSquaredTo(target), closestDistance) <= 0) {
 
-        Point2D currentClosest = Double.compare(nodeDistance, closestDistance) == -1 ? node.point : closest;
-        double currentClosestDistance = currentClosest.distanceSquaredTo(target);
-
-        if (Double.compare(node.rect.distanceSquaredTo(target), currentClosestDistance) <= 0) {
+            double nodeDistance = node.point.distanceSquaredTo(target);
+            currentClosest = Double.compare(nodeDistance, closestDistance) == -1 ? node.point : closest;
 
             if (node.left != null && node.left.rect.contains(target)) {
                 currentClosest = nearest(node.left, target, currentClosest);

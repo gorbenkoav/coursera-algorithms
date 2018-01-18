@@ -2,10 +2,8 @@ import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.RectHV;
 import edu.princeton.cs.algs4.StdDraw;
 
-import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
 
 /**
  * Represents a set of points in the unit square
@@ -27,7 +25,7 @@ public class PointSET {
      * @param p point to be validated
      * @throws IllegalArgumentException if point is null
      */
-    private void validate(Point2D p) throws IllegalArgumentException {
+    private void validate(Point2D p) {
         if (p == null) {
             throw new IllegalArgumentException("Point must not be null");
         }
@@ -92,14 +90,7 @@ public class PointSET {
         if (rect == null) {
             throw new IllegalArgumentException("Rectangle must not be null");
         }
-        return points.stream().filter(rect::contains).collect(Collectors.toSet());
-//        Set<Point2D> inside = new TreeSet<>();
-//        for (Point2D point : points) {
-//            if (rect.contains(point)) {
-//                inside.add(point);
-//            }
-//        }
-//        return inside;
+        return points.stream().filter(rect::contains)::iterator;
     }
 
     /**
