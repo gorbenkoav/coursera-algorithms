@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/8puzzle/8puzzle.iml" filepath="$PROJECT_DIR$/8puzzle/8puzzle.iml" />
       <module fileurl="file://$PROJECT_DIR$/coursera-algorithms.iml" filepath="$PROJECT_DIR$/coursera-algorithms.iml" />
       <module fileurl="file://$PROJECT_DIR$/kd-trees/kd-trees.iml" filepath="$PROJECT_DIR$/kd-trees/kd-trees.iml" />
+      <module fileurl="file://$PROJECT_DIR$/percolation/percolation.iml" filepath="$PROJECT_DIR$/percolation/percolation.iml" />
     </modules>
   </component>
 </project>
