@@ -10,6 +10,7 @@ public class SAP {
 
     /**
      * Constructor takes a digraph (not necessarily a DAG)
+     *
      * @param graph digraph
      */
     public SAP(Digraph graph) {
@@ -25,6 +26,7 @@ public class SAP {
 
     /**
      * Length of shortest ancestral path between v and w; -1 if no such path
+     *
      * @param v first vertex
      * @param w second vertex
      * @return shortest ancestral path
@@ -42,7 +44,7 @@ public class SAP {
                 minDistance = Integer.min(minDistance, vPaths.distTo(i) + wPaths.distTo(i));
             }
         }
-        return Integer.compare(minDistance, Integer.MAX_VALUE) == 0 ? -1: minDistance;
+        return Integer.compare(minDistance, Integer.MAX_VALUE) == 0 ? -1 : minDistance;
     }
 
     private void validateVertex(int vertex) {
@@ -53,6 +55,7 @@ public class SAP {
 
     /**
      * A common ancestor of v and w that participates in a shortest ancestral path; -1 if no such path
+     *
      * @param v first vertex
      * @param w second vertex
      * @return ancestor of v and w that participates in a shortest ancestral path;
@@ -79,7 +82,8 @@ public class SAP {
     }
 
     /**
-     * length of shortest ancestral path between any vertex in v and any vertex in w; -1 if no such path
+     * Length of shortest ancestral path between any vertex in v and any vertex in w; -1 if no such path
+     *
      * @param v first set of vertex
      * @param w second set of vertex
      * @return shortest ancestral path between any vertex in v and any vertex in w
@@ -90,14 +94,19 @@ public class SAP {
         return length(new BreadthFirstDirectedPaths(graph, v), new BreadthFirstDirectedPaths(graph, w));
     }
 
-    // a common ancestor that participates in shortest ancestral path; -1 if no such path
+    /**
+     * A common ancestor that participates in shortest ancestral path; -1 if no such path
+     *
+     * @param v first set of vertex
+     * @param w second set of vertex
+     * @return ancestor that participates in shortest ancestral path
+     */
     public int ancestor(Iterable<Integer> v, Iterable<Integer> w) {
         validate(v);
         validate(w);
         return ancestor(new BreadthFirstDirectedPaths(graph, v), new BreadthFirstDirectedPaths(graph, w));
     }
 
-    // do unit testing of this class
     public static void main(String[] args) {
         In in = new In(args[0]);
         Digraph G = new Digraph(in);
@@ -105,7 +114,7 @@ public class SAP {
         while (!StdIn.isEmpty()) {
             int v = StdIn.readInt();
             int w = StdIn.readInt();
-            int length   = sap.length(v, w);
+            int length = sap.length(v, w);
             int ancestor = sap.ancestor(v, w);
             StdOut.printf("length = %d, ancestor = %d\n", length, ancestor);
         }
