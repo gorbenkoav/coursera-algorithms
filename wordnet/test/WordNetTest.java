@@ -21,4 +21,10 @@ class WordNetTest {
     void sap() {
         assertEquals("abstraction abstract_entity", wordnet.sap("Polybotria", "crapette"));
     }
+
+    @Test
+    void rootedDag() {
+        assertThrows(IllegalArgumentException.class, () ->
+                new WordNet("./data/synsets3.txt", "./data/hypernyms3InvalidTwoRoots.txt"));
+    }
 }

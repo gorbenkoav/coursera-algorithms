@@ -19,8 +19,12 @@ public class Outcast {
         String outcast = null;
         for (int i = 0; i < nouns.length; i++) {
             int sum = 0;
-            for (int j = 0; j < nouns.length && i != j; j++) {
-                sum += wordnet.distance(nouns[i], nouns[j]);
+            int dist;
+            for (int j = 0; j < nouns.length; j++) {
+                dist = wordnet.distance(nouns[i], nouns[j]);
+                if (dist != -1) {
+                    sum += dist;
+                }
             }
             if (maxDistance < sum) {
                 maxDistance = sum;

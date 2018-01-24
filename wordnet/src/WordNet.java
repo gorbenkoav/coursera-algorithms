@@ -1,4 +1,6 @@
-import edu.princeton.cs.algs4.*;
+import edu.princeton.cs.algs4.Digraph;
+import edu.princeton.cs.algs4.In;
+import edu.princeton.cs.algs4.Queue;
 
 import java.util.HashMap;
 
@@ -53,11 +55,13 @@ public class WordNet {
     }
 
     private boolean isRootedDAG(Digraph digraph) {
-//        for (Integer item : new DepthFirstOrder(digraph).post()) {
-//            return digraph.indegree(item) == 0;
-//        }
-
-        return true;
+        int rootCount = 0;
+        for (int i = 0; i < digraph.V(); i++) {
+            if (digraph.outdegree(i) == 0) {
+                rootCount++;
+            }
+        }
+        return rootCount == 1;
     }
 
     private void validate(Object obj) {
@@ -125,10 +129,5 @@ public class WordNet {
             sap = String.join(" ", ids.get(ancestor));
         }
         return sap;
-    }
-
-    public static void main(String[] args) {
-        WordNet wordnet = new WordNet(args[0], args[1]);
-        //wordnet.distance()
     }
 }
