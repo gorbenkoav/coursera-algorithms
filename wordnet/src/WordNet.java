@@ -1,6 +1,4 @@
-import edu.princeton.cs.algs4.Digraph;
-import edu.princeton.cs.algs4.In;
-import edu.princeton.cs.algs4.Stack;
+import edu.princeton.cs.algs4.*;
 
 import java.util.HashMap;
 
@@ -8,8 +6,8 @@ public class WordNet {
 
     private final SAP sap;
 
-    private final HashMap<String, Integer> nouns = new HashMap<>();
-    private final HashMap<Integer, Iterable<String>> ids = new HashMap<>();
+    private final HashMap<String, Queue<Integer>> nouns = new HashMap<>();
+    private final HashMap<Integer, Queue<String>> ids = new HashMap<>();
 
     /**
      * Constructor takes the name of the two input files
@@ -27,12 +25,14 @@ public class WordNet {
             String[] line = in.readLine().split(",");
             String[] syns = line[1].split(" ");
 
-            Stack<String> items = new Stack<>();
-            ids.put(Integer.valueOf(line[0]), items);
-
-            for (int i = 0; i < syns.length; i++) {
-                nouns.put(syns[i], Integer.valueOf(line[0]));
-                items.push(syns[i]);
+            Queue<String> idItems = new Queue<>();
+            ids.put(Integer.valueOf(line[0]), idItems);
+            for (String syn : syns) {
+                idItems.enqueue(syn);
+                if (!nouns.containsKey(syn)) {
+                    nouns.put(syn, new Queue<>());
+                }
+                nouns.get(syn).enqueue(Integer.valueOf(line[0]));
             }
             nounCount++;
         }
@@ -46,7 +46,18 @@ public class WordNet {
             }
 
         }
+        if (!isRootedDAG(digraph)) {
+            throw new IllegalArgumentException("Input does not correspond to a rooted DAG");
+        }
         sap = new SAP(digraph);
+    }
+
+    private boolean isRootedDAG(Digraph digraph) {
+//        for (Integer item : new DepthFirstOrder(digraph).post()) {
+//            return digraph.indegree(item) == 0;
+//        }
+
+        return true;
     }
 
     private void validate(Object obj) {
@@ -61,6 +72,7 @@ public class WordNet {
             throw new IllegalArgumentException("Word must be a noun");
         }
     }
+
     /**
      * Returns all WordNet nouns
      *
@@ -107,13 +119,16 @@ public class WordNet {
     public String sap(String nounA, String nounB) {
         validateWord(nounA);
         validateWord(nounB);
-        for (String item : ids.get(sap.ancestor(nouns.get(nounA), nouns.get(nounB)))) {
-            return item;
+        int ancestor = sap.ancestor(nouns.get(nounA), nouns.get(nounB));
+        String sap = null;
+        if (ancestor != -1) {
+            sap = String.join(" ", ids.get(ancestor));
         }
-        return null;
+        return sap;
     }
 
     public static void main(String[] args) {
-
+        WordNet wordnet = new WordNet(args[0], args[1]);
+        //wordnet.distance()
     }
 }
