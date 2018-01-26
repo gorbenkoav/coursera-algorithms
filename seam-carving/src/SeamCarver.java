@@ -2,7 +2,6 @@ import edu.princeton.cs.algs4.IndexMinPQ;
 import edu.princeton.cs.algs4.Picture;
 
 import java.awt.Color;
-import java.util.function.IntSupplier;
 
 public class SeamCarver {
 
@@ -126,8 +125,8 @@ public class SeamCarver {
                 energy[i][j] = energy(i, j);
                 dists[i][j] = Double.POSITIVE_INFINITY;
             }
-            queue.insert(i * height, 0.0/*energy(i, 0)*/);
-            dists[i][0] = 0.0/*energy(i, 0)*/;
+            queue.insert(i * height, 0.0);
+            dists[i][0] = 0.0;
         }
 
         while (!queue.isEmpty()) {
@@ -196,7 +195,7 @@ public class SeamCarver {
      * @param seam to be removed
      */
     public void removeHorizontalSeam(int[] seam) {
-        validateSeam(seam, this::width);
+        validateSeam(seam, width(), height());
         pixels = transposePicture(pixels);
         removeVerticalSeam(seam);
         pixels = transposePicture(pixels);
@@ -208,13 +207,13 @@ public class SeamCarver {
      * @param seam to be removed
      */
     public void removeVerticalSeam(int[] seam) {
-        validateSeam(seam, this::height);
+        validateSeam(seam, height(), width());
         int[][] colors = new int[width() - 1][height()];
         for (int i = 0; i < height(); i++) {
             int row = 0;
             for (int j = 0; j < width(); j++) {
                 if (j != seam[i]) {
-                    colors[j][row++] = pixels[j][i];
+                    colors[row++][i] = pixels[j][i];
                 }
             }
         }
@@ -243,23 +242,22 @@ public class SeamCarver {
         }
     }
 
-    private void validateSeam(int[] seam, IntSupplier dimensionSize) {
+    private void validateSeam(int[] seam, int dim, int rangeDim) {
         validate(seam);
-        int dim = dimensionSize.getAsInt();
 
         if (seam.length != dim) {
-            throw new IllegalArgumentException("Size of picture is too small");
+            throw new IllegalArgumentException("Size of seam is not allow");
         }
 
         for (int i = 0; i < seam.length; i++) {
-            validateRange(seam[i], dim);
+            validateRange(seam[i], rangeDim);
             if (i != 0 && Math.abs(seam[i] - seam[i - 1]) > 1) {
                 throw new IllegalArgumentException("Diff between 2 neighbour entries more than one");
             }
 
         }
 
-        if (dimensionSize.getAsInt() <= 1) {
+        if (rangeDim <= 1) {
             throw new IllegalArgumentException("Size of picture is too small");
         }
     }
