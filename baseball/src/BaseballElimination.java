@@ -1,9 +1,21 @@
+import edu.princeton.cs.algs4.FlowEdge;
+import edu.princeton.cs.algs4.FlowNetwork;
+import edu.princeton.cs.algs4.FordFulkerson;
+import edu.princeton.cs.algs4.In;
+import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.algs4.StdOut;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Represents a sports division and determines which teams are mathematically eliminated
  */
 public class BaseballElimination {
+
+    private final Map<String, Team> teams = new HashMap<>();
+    private final Map<Integer, Team> ids = new HashMap<>();
+    private final int[][] divisionRemains;
 
     /**
      * Create a baseball division from given filename
@@ -11,7 +23,24 @@ public class BaseballElimination {
      * @param filename in specified format
      */
     public BaseballElimination(String filename) {
+        In in = new In(filename);
+        int teamNumber = in.readInt();
+        int teamIndex = 0;
+        divisionRemains = new int[teamNumber][teamNumber];
 
+        while (!in.isEmpty()) {
+            String teamName = in.readString();
+            int win = in.readInt();
+            int lose = in.readInt();
+            int remain = in.readInt();
+            teams.put(teamName, new Team(teamIndex, teamName, win, lose, remain));
+            ids.put(teamIndex, new Team(teamIndex, teamName, win, lose, remain));
+
+            for (int i = 0; i < teamNumber; i++) {
+                divisionRemains[teamIndex][i] = in.readInt();
+            }
+            teamIndex++;
+        }
     }
 
     /**
@@ -20,7 +49,7 @@ public class BaseballElimination {
      * @return number of teams
      */
     public int numberOfTeams() {
-        return 0;
+        return teams.size();
     }
 
     /**
@@ -29,7 +58,7 @@ public class BaseballElimination {
      * @return all teams
      */
     public Iterable<String> teams() {
-        return null;
+        return teams.keySet();
     }
 
     /**
@@ -39,7 +68,8 @@ public class BaseballElimination {
      * @return number of wins
      */
     public int wins(String team) {
-        return 0;
+        validateTeam(team);
+        return teams.get(team).win;
     }
 
     /**
@@ -49,7 +79,8 @@ public class BaseballElimination {
      * @return number of losses
      */
     public int losses(String team) {
-        return 0;
+        validateTeam(team);
+        return teams.get(team).lose;
     }
 
     /**
@@ -59,7 +90,8 @@ public class BaseballElimination {
      * @return number of remaining games
      */
     public int remaining(String team) {
-        return 0;
+        validateTeam(team);
+        return teams.get(team).remain;
     }
 
     /**
@@ -70,7 +102,9 @@ public class BaseballElimination {
      * @return number of remaining games
      */
     public int against(String team1, String team2) {
-        return 0;
+        validateTeam(team1);
+        validateTeam(team2);
+        return divisionRemains[teams.get(team1).id][teams.get(team2).id];
     }
 
     /**
@@ -80,6 +114,63 @@ public class BaseballElimination {
      * @return true if given team is eliminated
      */
     public boolean isEliminated(String team) {
+        validateTeam(team);
+        return isTrivialEliminated(team) || isNonTrivialEliminated(team);
+    }
+
+    private boolean isNonTrivialEliminated(String team) {
+        return certificateOfElimination(team) != null;
+    }
+
+    private FordFulkerson getFordFulkerson(String team) {
+        int teamId = teams.get(team).id;
+        int vertexGameNumber = getVertexGameNumber();
+        int vertexNumber = 2 + (numberOfTeams() - 1) + vertexGameNumber;
+        FlowNetwork network = new FlowNetwork(vertexNumber);
+
+        int vertexGameIndex = 1;
+        for (int i = 0; i < numberOfTeams(); i++) {
+            if (i != teamId) {
+                for (int j = i + 1; j < numberOfTeams(); j++) {
+                    if (j != teamId && divisionRemains[i][j] != 0) {
+
+                        FlowEdge edgeFromSToGame = new FlowEdge(0, vertexGameIndex, divisionRemains[i][j]);
+                        FlowEdge edgeFromGameToTeam1 = new FlowEdge(vertexGameIndex, vertexGameNumber + i + 1,
+                                Double.POSITIVE_INFINITY);
+
+                        FlowEdge edgeFromGameToTeam2 = new FlowEdge(vertexGameIndex, vertexGameNumber + j + 1,
+                                Double.POSITIVE_INFINITY);
+
+                        network.addEdge(edgeFromSToGame);
+                        network.addEdge(edgeFromGameToTeam1);
+                        network.addEdge(edgeFromGameToTeam2);
+                        vertexGameIndex++;
+                    }
+                }
+                if (wins(team) + remaining(team) - ids.get(i).win > 0) {
+                    FlowEdge edgeFromTeam1ToT = new FlowEdge(vertexGameNumber + i + 1, vertexNumber - 1,
+                            wins(team) + remaining(team) - ids.get(i).win);
+                    network.addEdge(edgeFromTeam1ToT);
+                }
+            }
+        }
+
+        //System.out.println(network.toString());
+
+        return new FordFulkerson(network, 0, vertexNumber - 1);
+    }
+
+    private int getVertexGameNumber() {
+        return numberOfTeams() * (numberOfTeams() - 1) / 2 - (numberOfTeams() - 1);
+    }
+
+    private boolean isTrivialEliminated(String team) {
+        int teamMaximumPoints = teams.get(team).win + teams.get(team).remain;
+        for (Map.Entry<String, Team> entry : teams.entrySet()) {
+            if (entry.getValue().win >= teamMaximumPoints) {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -90,7 +181,37 @@ public class BaseballElimination {
      * @return subset of teams that eliminates given team
      */
     public Iterable<String> certificateOfElimination(String team) {
-        return null;
+        validateTeam(team);
+        return isTrivialEliminated(team) ? getTrivialElimination(team) : getNonTrivialElimination(team);
+
+    }
+
+    private Iterable<String> getTrivialElimination(String team) {
+        int teamMaximumPoints = teams.get(team).win + teams.get(team).remain;
+        Queue<String> r = new Queue<>();
+        for (Map.Entry<String, Team> entry : teams.entrySet()) {
+            if (entry.getValue().win >= teamMaximumPoints) {
+                r.enqueue(entry.getKey());
+            }
+        }
+        return r.isEmpty() ? null : r;
+    }
+
+    private Iterable<String> getNonTrivialElimination(String team) {
+        FordFulkerson algorithm = getFordFulkerson(team);
+        Queue<String> r = new Queue<>();
+        for (Map.Entry<String, Team> entry : teams.entrySet()) {
+            if (!team.equals(entry.getKey()) && algorithm.inCut(getVertexGameNumber() + 1 + entry.getValue().id)) {
+                r.enqueue(entry.getKey());
+            }
+        }
+        return r.isEmpty() ? null : r;
+    }
+
+    private void validateTeam(String team) {
+        if (!teams.containsKey(team)) {
+            throw new IllegalArgumentException("team " + team + " is invalid");
+        }
     }
 
     public static void main(String[] args) {
@@ -105,6 +226,22 @@ public class BaseballElimination {
             } else {
                 StdOut.println(team + " is not eliminated");
             }
+        }
+    }
+
+    private static class Team {
+        int id;
+        String name;
+        int win;
+        int lose;
+        int remain;
+
+        public Team(int id, String name, int win, int lose, int remain) {
+            this.id = id;
+            this.name = name;
+            this.win = win;
+            this.lose = lose;
+            this.remain = remain;
         }
     }
 }
