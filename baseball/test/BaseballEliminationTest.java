@@ -40,13 +40,13 @@ class BaseballEliminationTest {
         assertFalse(division.isEliminated("Obama"));
     }
 
-    //@Test
+    @Test
     void baltimore() {
         BaseballElimination division = new BaseballElimination("./data/teams5b.txt");
         assertFalse(division.isEliminated("Baltimore"));
     }
 
-   // @Test
+    @Test
     void indiana() {
         BaseballElimination division = new BaseballElimination("./data/teams10.txt");
         assertFalse(division.isEliminated("Indiana"));

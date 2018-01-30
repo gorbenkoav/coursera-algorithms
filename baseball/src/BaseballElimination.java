@@ -131,7 +131,6 @@ public class BaseballElimination {
         int vertexGameIndex = 1;
         for (int i = 0; i < numberOfTeams(); i++) {
             if (i != teamId) {
-                boolean hasAnyRemain = false;
                 for (int j = i + 1; j < numberOfTeams(); j++) {
                     if (j != teamId && divisionRemains[i][j] != 0) {
 
@@ -146,10 +145,9 @@ public class BaseballElimination {
                         network.addEdge(edgeFromGameToTeam1);
                         network.addEdge(edgeFromGameToTeam2);
                         vertexGameIndex++;
-                        hasAnyRemain = true;
                     }
                 }
-                if (hasAnyRemain && wins(team) + remaining(team) > ids.get(i).win) {
+                if (wins(team) + remaining(team) > ids.get(i).win) {
                     FlowEdge edgeFromTeam1ToT = new FlowEdge(vertexGameNumber + i + 1, vertexNumber - 1,
                             wins(team) + remaining(team) - ids.get(i).win);
                     network.addEdge(edgeFromTeam1ToT);
@@ -157,7 +155,7 @@ public class BaseballElimination {
             }
         }
 
-       // System.out.println(network.toString());
+        //System.out.println(network.toString());
 
         return new FordFulkerson(network, 0, vertexNumber - 1);
     }
@@ -215,6 +213,7 @@ public class BaseballElimination {
         FordFulkerson algorithm = getFordFulkerson(team);
         Queue<String> r = new Queue<>();
         for (int i = 0; i < numberOfTeams(); i++) {
+            algorithm.value();
             if (!team.equals(ids.get(i).name) && algorithm.inCut(1 + getVertexGameNumber() + i)) {
                 r.enqueue(ids.get(i).name);
             }
