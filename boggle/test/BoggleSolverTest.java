@@ -1,19 +1,20 @@
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdOut;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTimeout;
 
 class BoggleSolverTest {
 
-    private BoggleSolver solverAlgs;
-    private BoggleSolver solverYawl;
+    private static BoggleSolver solverAlgs;
+    private static BoggleSolver solverYawl;
 
-    @BeforeEach
-    void constructSolver() {
+    @BeforeAll
+    static void constructSolver() {
         In in = new In("./data/dictionary-algs4.txt");
         String[] dictionary = in.readAllStrings();
         solverAlgs = new BoggleSolver(dictionary);
