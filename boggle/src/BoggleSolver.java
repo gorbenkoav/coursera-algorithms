@@ -45,7 +45,7 @@ public class BoggleSolver {
         if (letter == 'Q') {
             word += 'U';
         }
-        path[board.rows() * i + j] = true;
+        path[board.cols() * i + j] = true;
 
         if (isThereWordsWithPrefix(word)) {
             if (scoreOf(word) > 0 && !foundedWords.contains(word)) {
@@ -55,7 +55,7 @@ public class BoggleSolver {
             for (int k = i - 1; k <= i + 1; k++) {
                 for (int l = j - 1; l <= j + 1; l++) {
                     if ((i != k || l != j) && k >= 0 && k < board.rows() && l >= 0 && l < board.cols()) {
-                        if (!path[board.rows() * k + l]) {
+                        if (!path[board.cols() * k + l]) {
                             searchWords(board, word, k, l, foundedWords, Arrays.copyOf(path, path.length));
                         }
                     }

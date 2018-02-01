@@ -50,9 +50,9 @@ class BoggleSolverTest {
 
     @Test
     void getAllValidWordsPerformance() {
-        assertTimeout(Duration.ofSeconds(2), ()-> {
+        assertTimeout(Duration.ofSeconds(2), () -> {
             for (int i = 0; i < 100; i++) {
-                solverAlgs.getAllValidWords(new BoggleBoard(4,4));
+                solverAlgs.getAllValidWords(new BoggleBoard(4, 4));
             }
         });
     }
@@ -60,5 +60,8 @@ class BoggleSolverTest {
     @Test
     void scoreOfLongWord() {
         assertEquals(11, solverYawl.scoreOf("antidisestablishmentarianisms".toUpperCase()));
+
+
+        solverYawl.getAllValidWords(new BoggleBoard("./data/board-dichlorodiphenyltrichloroethanes.txt"));
     }
 }
