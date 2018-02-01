@@ -14,47 +14,47 @@ import edu.princeton.cs.algs4.StdRandom;
 public class BoggleBoard {
     // the 16 Boggle dice (1992 version)
     private static final String[] BOGGLE_1992 = {
-            "LRYTTE", "VTHRWE", "EGHWNE", "SEOTIS",
-            "ANAEEG", "IDSYTT", "OATTOW", "MTOICU",
-            "AFPKFS", "XLDERI", "HCPOAS", "ENSIEU",
-            "YLDEVR", "ZNRNHL", "NMIQHU", "OBBAOJ"
+        "LRYTTE", "VTHRWE", "EGHWNE", "SEOTIS",
+        "ANAEEG", "IDSYTT", "OATTOW", "MTOICU",
+        "AFPKFS", "XLDERI", "HCPOAS", "ENSIEU",
+        "YLDEVR", "ZNRNHL", "NMIQHU", "OBBAOJ"
     };
 
     // the 16 Boggle dice (1983 version)
     private static final String[] BOGGLE_1983 = {
-            "AACIOT", "ABILTY", "ABJMOQ", "ACDEMP",
-            "ACELRS", "ADENVZ", "AHMORS", "BIFORX",
-            "DENOSW", "DKNOTU", "EEFHIY", "EGINTV",
-            "EGKLUY", "EHINPS", "ELPSTU", "GILRUW",
+        "AACIOT", "ABILTY", "ABJMOQ", "ACDEMP",
+        "ACELRS", "ADENVZ", "AHMORS", "BIFORX",
+        "DENOSW", "DKNOTU", "EEFHIY", "EGINTV",
+        "EGKLUY", "EHINPS", "ELPSTU", "GILRUW",
     };
 
     // the 25 Boggle Master / Boggle Deluxe dice
     private static final String[] BOGGLE_MASTER = {
-            "AAAFRS", "AAEEEE", "AAFIRS", "ADENNN", "AEEEEM",
-            "AEEGMU", "AEGMNN", "AFIRSY", "BJKQXZ", "CCNSTW",
-            "CEIILT", "CEILPT", "CEIPST", "DDLNOR", "DHHLOR",
-            "DHHNOT", "DHLNOR", "EIIITT", "EMOTTT", "ENSSSU",
-            "FIPRSY", "GORRVW", "HIPRRY", "NOOTUW", "OOOTTU"
+        "AAAFRS", "AAEEEE", "AAFIRS", "ADENNN", "AEEEEM",
+        "AEEGMU", "AEGMNN", "AFIRSY", "BJKQXZ", "CCNSTW",
+        "CEIILT", "CEILPT", "CEIPST", "DDLNOR", "DHHLOR",
+        "DHHNOT", "DHLNOR", "EIIITT", "EMOTTT", "ENSSSU",
+        "FIPRSY", "GORRVW", "HIPRRY", "NOOTUW", "OOOTTU"
     };
 
     // the 25 Big Boggle dice
     private static final String[] BOGGLE_BIG = {
-            "AAAFRS", "AAEEEE", "AAFIRS", "ADENNN", "AEEEEM",
-            "AEEGMU", "AEGMNN", "AFIRSY", "BJKQXZ", "CCENST",
-            "CEIILT", "CEILPT", "CEIPST", "DDHNOT", "DHHLOR",
-            "DHLNOR", "DHLNOR", "EIIITT", "EMOTTT", "ENSSSU",
-            "FIPRSY", "GORRVW", "IPRRRY", "NOOTUW", "OOOTTU"
+        "AAAFRS", "AAEEEE", "AAFIRS", "ADENNN", "AEEEEM",
+        "AEEGMU", "AEGMNN", "AFIRSY", "BJKQXZ", "CCENST",
+        "CEIILT", "CEILPT", "CEIPST", "DDHNOT", "DHHLOR",
+        "DHLNOR", "DHLNOR", "EIIITT", "EMOTTT", "ENSSSU",
+        "FIPRSY", "GORRVW", "IPRRRY", "NOOTUW", "OOOTTU"
     };
 
 
     // letters and frequencies of letters in the English alphabet
     private static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private static final double[] FREQUENCIES = {
-            0.08167, 0.01492, 0.02782, 0.04253, 0.12703, 0.02228,
-            0.02015, 0.06094, 0.06966, 0.00153, 0.00772, 0.04025,
-            0.02406, 0.06749, 0.07507, 0.01929, 0.00095, 0.05987,
-            0.06327, 0.09056, 0.02758, 0.00978, 0.02360, 0.00150,
-            0.01974, 0.00074
+        0.08167, 0.01492, 0.02782, 0.04253, 0.12703, 0.02228,
+        0.02015, 0.06094, 0.06966, 0.00153, 0.00772, 0.04025,
+        0.02406, 0.06749, 0.07507, 0.01929, 0.00095, 0.05987,
+        0.06327, 0.09056, 0.02758, 0.00978, 0.02360, 0.00150,
+        0.01974, 0.00074
     };
 
     private final int m;        // number of rows
@@ -77,7 +77,7 @@ public class BoggleBoard {
             }
         }
     }
-
+    
     /**
      * Initializes a board from the given filename.
      * @param filename the name of the file containing the Boggle board
@@ -98,7 +98,7 @@ public class BoggleBoard {
                     throw new IllegalArgumentException("invalid character: " + letter);
                 else if (ALPHABET.indexOf(letter) == -1)
                     throw new IllegalArgumentException("invalid character: " + letter);
-                else
+                else 
                     board[i][j] = letter.charAt(0);
             }
         }
@@ -211,10 +211,10 @@ public class BoggleBoard {
         // initialize a 4-by-4 board from a 2d char array
         StdOut.println("4-by-4 board from 2D character array:");
         char[][] a =  {
-                { 'D', 'O', 'T', 'Y' },
-                { 'T', 'R', 'S', 'F' },
-                { 'M', 'X', 'M', 'O' },
-                { 'Z', 'A', 'B', 'W' }
+            { 'D', 'O', 'T', 'Y' },
+            { 'T', 'R', 'S', 'F' },
+            { 'M', 'X', 'M', 'O' },
+            { 'Z', 'A', 'B', 'W' }
         };
         BoggleBoard board3 = new BoggleBoard(a);
         StdOut.println(board3);
@@ -227,5 +227,5 @@ public class BoggleBoard {
         StdOut.println(board4);
         StdOut.println();
     }
-
+    
 }
