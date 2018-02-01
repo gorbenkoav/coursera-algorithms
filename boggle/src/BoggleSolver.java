@@ -65,7 +65,10 @@ public class BoggleSolver {
 
     private void searchWords(BoggleBoard board, String word, int i, int j, Set<String> foundedWords, boolean[] path) {
         char letter = board.getLetter(i, j);
-        word = word + String.valueOf(letter);
+        word += String.valueOf(letter);
+        if (letter == 'Q') {
+            word += 'U';
+        }
         path[board.rows() * i + j] = true;
 
         if (isThereWordsWithPrefix(word)) {
