@@ -50,8 +50,8 @@ class BoggleSolverTest {
 
     @Test
     void getAllValidWordsPerformance() {
-        assertTimeout(Duration.ofSeconds(2), () -> {
-            for (int i = 0; i < 100; i++) {
+        assertTimeout(Duration.ofSeconds(25), () -> {
+            for (int i = 0; i < 10000; i++) {
                 solverAlgs.getAllValidWords(new BoggleBoard(4, 4));
             }
         });

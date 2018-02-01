@@ -2,7 +2,6 @@ import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.TST;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -56,12 +55,13 @@ public class BoggleSolver {
                 for (int l = j - 1; l <= j + 1; l++) {
                     if ((i != k || l != j) && k >= 0 && k < board.rows() && l >= 0 && l < board.cols()) {
                         if (!path[board.cols() * k + l]) {
-                            searchWords(board, word, k, l, foundedWords, Arrays.copyOf(path, path.length));
+                            searchWords(board, word, k, l, foundedWords, path);
                         }
                     }
                 }
             }
         }
+        path[board.cols() * i + j] = false;
     }
 
 
