@@ -3,34 +3,10 @@ import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.TST;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 public class BoggleSolver {
-
-    private static Map<Integer, Integer> points = new HashMap<>();
-
-    static {
-        points.put(0, 0);
-        points.put(1, 0);
-        points.put(2, 0);
-        points.put(3, 1);
-        points.put(4, 1);
-        points.put(5, 2);
-        points.put(6, 3);
-        points.put(7, 5);
-        points.put(8, 11);
-        points.put(9, 11);
-        points.put(10, 11);
-        points.put(11, 11);
-        points.put(12, 11);
-        points.put(13, 11);
-        points.put(14, 11);
-        points.put(15, 11);
-        points.put(16, 11);
-    }
 
     private final TST<Boolean> dictionary;
 
@@ -101,7 +77,26 @@ public class BoggleSolver {
      * @return score of the word
      */
     public int scoreOf(String word) {
-        return dictionary.contains(word) ? points.get(word.length()) : 0;
+        if (dictionary.contains(word)) {
+            switch (word.length()) {
+                case 0:
+                case 1:
+                case 2:
+                    return 0;
+                case 3:
+                case 4:
+                    return 1;
+                case 5:
+                    return 2;
+                case 6:
+                    return 3;
+                case 7:
+                    return 5;
+                default:
+                    return 11;
+            }
+        }
+        return 0;
     }
 
     public static void main(String[] args) {

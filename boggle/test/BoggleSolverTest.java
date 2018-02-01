@@ -9,22 +9,27 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BoggleSolverTest {
 
-    BoggleSolver solver;
+    private BoggleSolver solverAlgs;
+    private BoggleSolver solverYawl;
 
     @BeforeEach
     void constructSolver() {
         In in = new In("./data/dictionary-algs4.txt");
         String[] dictionary = in.readAllStrings();
-        solver = new BoggleSolver(dictionary);
+        solverAlgs = new BoggleSolver(dictionary);
+
+        in = new In("./data/dictionary-yawl.txt");
+        dictionary = in.readAllStrings();
+        solverYawl = new BoggleSolver(dictionary);
     }
 
     @Test
     void getAllValidWordsFromBoardWithoutQu() {
         BoggleBoard board = new BoggleBoard("./data/board4x4.txt");
         int score = 0;
-        for (String word : solver.getAllValidWords(board)) {
+        for (String word : solverAlgs.getAllValidWords(board)) {
             StdOut.println(word);
-            score += solver.scoreOf(word);
+            score += solverAlgs.scoreOf(word);
         }
         StdOut.println("Score = " + score);
         assertEquals(33, score);
@@ -32,14 +37,11 @@ class BoggleSolverTest {
 
     @Test
     void getAllValidWordsFromBoardWithQu() {
-        In in = new In("./data/dictionary-algs4.txt");
-        String[] dictionary = in.readAllStrings();
-        BoggleSolver solver = new BoggleSolver(dictionary);
         BoggleBoard board = new BoggleBoard("./data/board-q.txt");
         int score = 0;
-        for (String word : solver.getAllValidWords(board)) {
+        for (String word : solverAlgs.getAllValidWords(board)) {
             StdOut.println(word);
-            score += solver.scoreOf(word);
+            score += solverAlgs.scoreOf(word);
         }
         StdOut.println("Score = " + score);
         assertEquals(84, score);
@@ -49,9 +51,13 @@ class BoggleSolverTest {
     void getAllValidWordsPerformance() {
         assertTimeout(Duration.ofSeconds(2), ()-> {
             for (int i = 0; i < 100; i++) {
-                solver.getAllValidWords(new BoggleBoard(4,4));
+                solverAlgs.getAllValidWords(new BoggleBoard(4,4));
             }
         });
     }
 
+    @Test
+    void scoreOfLongWord() {
+        assertEquals(11, solverYawl.scoreOf("antidisestablishmentarianisms".toUpperCase()));
+    }
 }
