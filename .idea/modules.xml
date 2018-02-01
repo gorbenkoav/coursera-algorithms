@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/8puzzle/8puzzle.iml" filepath="$PROJECT_DIR$/8puzzle/8puzzle.iml" />
       <module fileurl="file://$PROJECT_DIR$/baseball/baseball.iml" filepath="$PROJECT_DIR$/baseball/baseball.iml" />
+      <module fileurl="file://$PROJECT_DIR$/boggle/boggle.iml" filepath="$PROJECT_DIR$/boggle/boggle.iml" />
       <module fileurl="file://$PROJECT_DIR$/collinear-points/collinear-points.iml" filepath="$PROJECT_DIR$/collinear-points/collinear-points.iml" />
       <module fileurl="file://$PROJECT_DIR$/coursera-algorithms.iml" filepath="$PROJECT_DIR$/coursera-algorithms.iml" />
       <module fileurl="file://$PROJECT_DIR$/kd-trees/kd-trees.iml" filepath="$PROJECT_DIR$/kd-trees/kd-trees.iml" />
