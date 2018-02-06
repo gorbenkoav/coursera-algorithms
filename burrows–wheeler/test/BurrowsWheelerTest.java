@@ -13,12 +13,12 @@ class BurrowsWheelerTest {
 
         System.setIn(new FileInputStream("./data/abra.txt"));
 
-        ByteArrayOutputStream mtfEncodeOut = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(mtfEncodeOut));
+        ByteArrayOutputStream bwTransformOut = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(bwTransformOut));
 
         BurrowsWheeler.main(new String[]{"-"});
 
-        System.setIn(new ByteArrayInputStream(mtfEncodeOut.toByteArray()));
+        System.setIn(new ByteArrayInputStream(bwTransformOut.toByteArray()));
         ByteArrayOutputStream hexDumpOut = new ByteArrayOutputStream();
         System.setOut(new PrintStream(hexDumpOut));
 
@@ -30,6 +30,25 @@ class BurrowsWheelerTest {
     }
 
     @Test
-    void inverseTransform() {
+    void inverseTransform() throws FileNotFoundException {
+        PrintStream oldOut = System.out;
+        InputStream oldIn = System.in;
+
+        System.setIn(new FileInputStream("./data/abra.txt"));
+
+        ByteArrayOutputStream bwTransformOut = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(bwTransformOut));
+
+        BurrowsWheeler.main(new String[]{"-"});
+
+        System.setIn(new ByteArrayInputStream(bwTransformOut.toByteArray()));
+        ByteArrayOutputStream bwInverseTransformOut = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(bwInverseTransformOut));
+
+        BurrowsWheeler.main(new String[]{"+"});
+        assertEquals("ABRACADABRA!", bwInverseTransformOut.toString());
+
+        System.setOut(oldOut);
+        System.setIn(oldIn);
     }
 }
