@@ -15,14 +15,15 @@ public class CircularSuffixArray {
         }
         int length = s.length();
         TreeMap<String, Integer> map = new TreeMap<>();
-        map.put(s, 0);
+        if (length > 0) {
+            map.put(s, 0);
 
-        StringBuilder builder = new StringBuilder(s);
-        for (int i = 1; i < length; i++) {
-            builder.append(builder.charAt(0)).deleteCharAt(0);
-            map.put(builder.toString(), i);
+            StringBuilder builder = new StringBuilder(s);
+            for (int i = 1; i < length; i++) {
+                builder.append(builder.charAt(0)).deleteCharAt(0);
+                map.put(builder.toString(), i);
+            }
         }
-
         indexes = map.values().toArray(new Integer[0]);
     }
 

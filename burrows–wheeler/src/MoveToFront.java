@@ -14,7 +14,7 @@ public class MoveToFront {
         while (!BinaryStdIn.isEmpty()) {
             c = BinaryStdIn.readChar(8);
             int index = symbols.indexOf(c);
-            BinaryStdOut.write((char)index, 8);
+            BinaryStdOut.write(index, 8);
             symbols.remove(index);
             symbols.addFirst(c);
         }
@@ -24,10 +24,10 @@ public class MoveToFront {
 
     private static LinkedList<Character> generateSymbolTable() {
         LinkedList<Character> symbols = new LinkedList<>();
-        for (int i = 0; i < 255; i++) {
+        for (int i = 0; i < 256; i++) {
             symbols.add((char) i);
         }
-        return  symbols;
+        return symbols;
     }
 
     /**

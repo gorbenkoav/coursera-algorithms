@@ -7,6 +7,7 @@ class CircularSuffixArrayTest {
     @Test
     void index() {
         assertThrows(IllegalArgumentException.class, () -> new CircularSuffixArray(null));
+        assertEquals(0, new CircularSuffixArray("").length());
         CircularSuffixArray suffixArray = new CircularSuffixArray("ABRACADABRA!");
         assertThrows(IllegalArgumentException.class, () -> suffixArray.index(13));
         assertEquals(2, suffixArray.index(11));
