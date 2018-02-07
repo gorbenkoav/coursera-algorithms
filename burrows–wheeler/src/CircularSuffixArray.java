@@ -1,8 +1,6 @@
-import java.util.TreeMap;
-
 public class CircularSuffixArray {
 
-    private Integer[] indexes;
+    private final int[] indexes;
 
     /**
      * Define circular suffix array of s
@@ -13,18 +11,43 @@ public class CircularSuffixArray {
         if (s == null) {
             throw new IllegalArgumentException();
         }
-        int length = s.length();
-        TreeMap<String, Integer> map = new TreeMap<>();
-        if (length > 0) {
-            map.put(s, 0);
 
-            StringBuilder builder = new StringBuilder(s);
-            for (int i = 1; i < length; i++) {
-                builder.append(builder.charAt(0)).deleteCharAt(0);
-                map.put(builder.toString(), i);
+        int length = s.length();
+        indexes = new int[length];
+        for (int i = 0; i < length; i++) {
+            indexes[i] = i;
+        }
+
+        sort(s);
+    }
+
+    private void sort(String s) {
+        int alphabetLength = 256;
+        int length = s.length();
+        int[] aux = new int[length];
+
+        char[] a = s.toCharArray();
+
+        for (int k = length - 1; k >= 0; k--) {
+
+            int[] count = new int[alphabetLength + 1];
+            for (int i = 0; i < length; i++) {
+                count[a[i] + 1]++;
+            }
+
+            for (int r = 0; r < alphabetLength; r++) {
+                count[r + 1] += count[r];
+            }
+
+            for (int i = 0; i < length; i++) {
+                aux[count[a[(k + indexes[i]) % length]]++] = indexes[i];
+            }
+
+            for (int i = 0; i < length; i++) {
+                indexes[i] = aux[i];
             }
         }
-        indexes = map.values().toArray(new Integer[0]);
+
     }
 
     /**
